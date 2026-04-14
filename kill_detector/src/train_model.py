@@ -53,9 +53,9 @@ def save_model(clf, model_path):
         pickle.dump(clf, f)
 
 if __name__ == "__main__":
-    kill_dir = "kill_detector/data/samples/kill"
-    non_kill_dir = "kill_detector/data/samples/non_kill"
-    model_path = "kill_detector/models/kill_model.pkl"
+    kill_dir = "data/samples/kill"
+    non_kill_dir = "data/samples/non_kill"
+    model_path = "models/kill_model.pkl"
 
     X, y = read_labeled_clips(kill_dir, non_kill_dir)
     clf = train_and_evaluate_model(X, y)

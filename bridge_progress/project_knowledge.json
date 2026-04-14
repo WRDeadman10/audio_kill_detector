@@ -1,0 +1,263 @@
+{
+  "project": {
+    "name": "audio_kill_detector",
+    "type": "python",
+    "language": "unknown",
+    "summary": "# Audio Kill Detector ## Overview Audio-based kill event detector for Valorant clips. ## Architecture converts video to mono WAV (22050Hz). builds fixed-size feature vectors.",
+    "repo_root": "H:\\Ai_Project\\audio_kill_detector",
+    "first_seen": "2026-04-14",
+    "last_updated": "2026-04-14",
+    "understanding_confirmed": false,
+    "scanned": true
+  },
+  "files": {
+    "TASK_PLAN_active.json": {
+      "role": "\ufeff{",
+      "task_type": "scan",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    ".code-review-graph/graph.html": {
+      "role": "<!DOCTYPE html>",
+      "task_type": "scan",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "project docs/project_idea.md": {
+      "role": "You are a senior ML + audio signal processing engineer.",
+      "task_type": "scan",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    ".code-review-graph/wiki/index.md": {
+      "role": "Auto-generated documentation from the code knowledge graph community structure.",
+      "task_type": "scan",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/requirements.txt": {
+      "role": "with compatible pinned versions for numpy, librosa, scikit-learn, ffmpeg-python, and scipy/soundfile/joblib as needed by these libraries.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/utils.py": {
+      "role": "Create utility module with typed helpers for logger setup, mkdir/ensure-directory, safe JSON writing, mp4 file discovery, and timestamp filtering with minimum gap.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/audio_extractor.py": {
+      "role": "Implement FFmpeg-based audio extraction service using ffmpeg-python.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/onset_detector.py": {
+      "role": "Implement onset detector using librosa.onset.onset_detect that returns sorted candidate timestamps in seconds.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/feature_extractor.py": {
+      "role": "Implement feature extractor for 0.5 second windows: MFCC(13) mean+std, spectral centroid mean+std, zero crossing rate mean+std, spectral rolloff mean+std.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/train_model.py": {
+      "role": "Implement training pipeline that reads labeled clips from kill_detector/data/samples/kill and kill_detector/data/samples/non_kill, extracts features, trains RandomForestClassifier(n_estimators=100),...",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/src/predict.py": {
+      "role": "Implement inference pipeline that loads model, extracts WAV from video, finds onset candidates, extracts 0.5s windows, computes features, predicts probabilities, keeps events above confidence...",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/main.py": {
+      "role": "from scratch.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/tests/test_feature_extractor.py": {
+      "role": "Add unit tests validating feature extractor returns deterministic fixed-size vectors and handles short synthetic audio arrays safely.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/tests/test_post_processing.py": {
+      "role": "Add unit tests for timestamp gap filtering behavior ensuring events under minimum gap are collapsed correctly while preserving ordering.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    },
+    "kill_detector/tests/test_onset_detector.py": {
+      "role": "Add unit tests for onset detector edge cases: empty signal, very short clip, and synthetic transient signal producing non-negative sorted timestamps.",
+      "task_type": "create",
+      "last_modified": "2026-04-14",
+      "created": "2026-04-14"
+    }
+  },
+  "docs": [
+    {
+      "path": "kill_detector/README.md",
+      "title": "Audio Kill Detector",
+      "summary": "# Audio Kill Detector ## Overview Audio-based kill event detector for Valorant clips. ## Architecture converts video to mono WAV (22050Hz). builds fixed-size feature vectors.",
+      "score": 160
+    },
+    {
+      "path": ".aider.chat.history.md",
+      "title": "aider chat started at 2026-04-14 18:22:13",
+      "summary": "# aider chat started at 2026-04-14 18:22:13 Can't initialize prompt toolkit: No Windows console found. C:\\Python311\\Scripts\\aider.EXE --model ...lama/qwen2.5-coder:14b --yes-always --no-pretty --no-stream --no-auto-lint --no-auto-commits --no-gitignore --no-show-model-warnings --no-browser --no-detect-urls --no-suggest-shell-commands --timeout 660 --edit-format diff --map-refresh manual --message Reply with OK. RULES CRITICAL: edit ONLY the TARGET FILES listed above \u2014 do NOT create, reference, inspect, or add any other files to the chat CRITICAL: use the exact absolute path shown \u2014 do not change the filename, directory, or extension CRITICAL: stay scoped \u2014 do NOT mention, import, or reason about files outside the target list.",
+      "score": 75
+    },
+    {
+      "path": "project docs/project_idea.md",
+      "title": "project_idea",
+      "summary": "You are a senior ML + audio signal processing engineer. Build a complete Python project that detects \"kill events\" from Valorant gameplay videos using audio classification. The system must be modular, production-ready, and optimized for accuracy + speed.",
+      "score": 30
+    },
+    {
+      "path": ".code-review-graph/wiki/index.md",
+      "title": "Code Wiki",
+      "summary": "# Code Wiki Auto-generated documentation from the code knowledge graph community structure. **Total communities**: 0 ## Communities | Community | Size | Link | |-----------|------|------|",
+      "score": 21
+    }
+  ],
+  "patterns": [],
+  "features_done": [
+    "requirements",
+    "utils",
+    "audio_extractor",
+    "onset_detector",
+    "feature_extractor",
+    "train_model",
+    "predict",
+    "main",
+    "test_feature_extractor",
+    "test_post_processing",
+    "test_onset_detector"
+  ],
+  "suggested_next": [],
+  "clarifications": [],
+  "runs": [
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 3,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 7,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 1,
+      "status": "success"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 3,
+      "status": "failure"
+    },
+    {
+      "date": "2026-04-14",
+      "goal": "Build a logging system feature",
+      "tasks_completed": 0,
+      "status": "failure"
+    }
+  ]
+}
