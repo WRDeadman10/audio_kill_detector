@@ -1,0 +1,24 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Pytest cache
+.pytest_cache/
+
+# Generated audio/wav cache
+audio_cache/
+*.wav.cache
+
+# Model artifacts
+models/
+*.pkl
+*.h5
+
+# Output JSON folders
+output/
+*.json.cache
+
+# Directories to ignore
+logs/
+temp/
