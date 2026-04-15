@@ -3,6 +3,7 @@ import numpy as np
 import librosa
 import os
 from kill_detector.src.feature_extractor import extract_features
+import soundfile as sf
 
 class TestFeatureExtractor(unittest.TestCase):
     """
@@ -21,7 +22,7 @@ class TestFeatureExtractor(unittest.TestCase):
         self.audio_data = np.zeros(int(self.sr * self.duration)).astype(np.float32)
         
         # Save the dummy audio file
-        librosa.output.write(self.dummy_audio_path, self.audio_data, sr=self.sr)
+        sf.write(self.dummy_audio_path, self.audio_data, self.sr)
 
     def tearDown(self):
         # Clean up the temporary directory and files
@@ -58,7 +59,7 @@ class TestFeatureExtractor(unittest.TestCase):
         short_duration = 0.1
         short_audio_data = np.random.rand(int(self.sr * short_duration)).astype(np.float32)
         short_audio_path = os.path.join(self.temp_dir, "short_audio.wav")
-        librosa.output.write(short_audio_path, short_audio_data, sr=self.sr)
+        sf.write(short_audio_path, short_audio_data, self.sr)
 
         try:
             features = extract_features(short_audio_path)

@@ -15,56 +15,29 @@ kill_detector/src/__pycache__/*
 bridge_progress/manual_supervisor/
 .aider.input.history
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Pytest cache
+.pytest_cache/
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Generated audio/wav cache
+audio_cache/
+*.wav.cache
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Model artifacts
+models/
+*.pkl
+*.h5
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Output JSON folders
+output/
+*.json.cache
 
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
-
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
-
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
-
-# ── Aider / Bridge artefacts ─────────────────────────────────────
-taskJsons/                               # AI-generated task plan JSON files
-bridge_progress/                         # Bridge run state, checkpoints and reports
-logs.meta                                # Unity meta for bridge logs folder
-bridge_progress.meta                     # Unity meta for bridge_progress folder
+# Directories to ignore
+logs/
+temp/
+# Added by code-review-graph
+.code-review-graph/

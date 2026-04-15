@@ -14,14 +14,18 @@ def read_labeled_clips(kill_dir, non_kill_dir):
     for file in os.listdir(kill_dir):
         if file.endswith('.mp3'):
             features = extract_features(os.path.join(kill_dir, file))
-            X.append(features)
-            y.append(1)  # Label as 1 for kill clips
+            
+            if features is not None:
+                X.append(features)
+                y.append(1)  # Label as 1 for kill clips
     
     for file in os.listdir(non_kill_dir):
         if file.endswith('.mp3'):
             features = extract_features(os.path.join(non_kill_dir, file))
-            X.append(features)
-            y.append(0)  # Label as 0 for non-kill clips
+            
+            if features is not None:
+                X.append(features)
+                y.append(0)  # Label as 0 for non-kill clips
     
     return np.array(X), np.array(y)
 

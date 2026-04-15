@@ -1,4 +1,5 @@
 import ffmpeg
+import os
 
 def extract_audio(video_path: str, output_path: str) -> None:
     "Extract audio from video using FFmpeg"

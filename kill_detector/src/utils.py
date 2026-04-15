@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from typing import List, Dict
 
 SAMPLE_RATE = 22050
@@ -8,13 +9,18 @@ DEFAULT_CONFIDENCE = 0.7
 MIN_GAP_SECONDS = 0.3
 
 def setup_logger(name: str) -> logging.Logger:
-    "Setup logger"
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler()
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+
+    # 🚫 Prevent duplicate handlers
+    if not logger.handlers:
+        handler = logging.StreamHandler()
+        formatter = logging.Formatter(
+            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+
     return logger
 
 def ensure_directory(path: str) -> None:

@@ -4,6 +4,7 @@ import librosa
 import os
 import shutil
 from kill_detector.src.onset_detector import detect_onsets
+import soundfile as sf
 
 class TestOnsetDetector(unittest.TestCase):
     """
@@ -27,7 +28,7 @@ class TestOnsetDetector(unittest.TestCase):
         # Simple sine wave for testing
         audio_data = 0.5 * np.sin(2 * np.pi * frequency * t)
         dummy_path = os.path.join(self.temp_dir, "dummy_audio.wav")
-        librosa.output.write(dummy_path, audio_data, sr=self.sr)
+        sf.write(dummy_path, audio_data, self.sr)
         return dummy_path
 
     def test_basic_onset_detection(self):
