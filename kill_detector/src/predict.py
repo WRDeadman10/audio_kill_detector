@@ -3,7 +3,9 @@ import librosa
 import numpy as np
 import subprocess
 import os
-from kill_detector.src.onset_detector import detect_onsets
+from onset_detector import detect_onsets
+from audio_extractor import extract_wav_from_video
+import utils
 
 def predict_events(
     video_path,
@@ -17,6 +19,9 @@ def predict_events(
 
     # ✅ Extract WAV
     wav_path = extract_wav_from_video(video_path)
+
+    if wav_path is None or not os.path.exists(wav_path):
+        raise RuntimeError("Audio extraction failed")
 
     # ✅ Load audio (FIXED)
     y, sr = librosa.load(wav_path)
@@ -88,18 +93,7 @@ def extract_features_from_array(y, sr):
 
     return features
 
-def extract_wav_from_video(video_path):
-    output_path = video_path.replace(".mp4", ".wav")
 
-    command = [
-        "ffmpeg",
-        "-y",
-        "-i", video_path,
-        "-ac", "1",
-        "-ar", "22050",
-        output_path
-    ]
-
-    subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    return output_path
+if __name__ == "__main__":
+    utils.setup_logger("audio_kill")
+    predict_events(r"H:\Ai_Project\audio_kill_detector\inputFolder\inputVideo.mp4")

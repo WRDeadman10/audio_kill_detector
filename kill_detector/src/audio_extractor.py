@@ -1,24 +1,39 @@
-import ffmpeg
+import subprocess
 import os
+import tempfile
 
-def extract_audio(video_path: str, output_path: str) -> None:
-    "Extract audio from video using FFmpeg"
-    try:
-        # Check if output file already exists and handle overwrite control
-        if os.path.exists(output_path):
-            overwrite = input(f"File {output_path} already exists. Overwrite? (y/n): ")
-            if overwrite.lower() != 'y':
-                print("Operation cancelled.")
-                return
 
-        # Extract audio using ffmpeg-python
-        (
-            ffmpeg
-            .input(video_path)
-            .output(output_path, acodec='pcm_s16le', ar=22050, ac=1)
-            .run()
-        )
+def extract_wav_from_video(video_path: str) -> str:
+    if not os.path.exists(video_path):
+        raise FileNotFoundError(f"Video not found: {video_path}")
 
-        print(f"Audio extracted successfully to {output_path}")
-    except Exception as e:
-        print(f"Error extracting audio: {e}")
+    # ✅ Always generate temp WAV (no overwrite issues)
+    temp_dir = tempfile.gettempdir()
+    output_path = os.path.join(temp_dir, "kill_detector_audio.wav")
+
+    command = [
+        "ffmpeg",
+        "-y",
+        "-i", video_path,
+        "-vn",                 # 🚀 ignore video stream
+        "-acodec", "pcm_s16le",# 🚀 force WAV format
+        "-ar", "22050",        # sample rate
+        "-ac", "1",            # mono
+        output_path
+    ]
+
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    # 🔴 If ffmpeg fails → STOP immediately
+    if result.returncode != 0:
+        raise RuntimeError(f"FFmpeg failed:\n{result.stderr}")
+
+    # 🔴 Double-check file actually exists
+    if not os.path.exists(output_path):
+        raise RuntimeError("WAV file was not created")
+
+    # 🔴 Check file size (common silent failure)
+    if os.path.getsize(output_path) < 1000:
+        raise RuntimeError("Generated WAV file is too small / invalid")
+
+    return output_path
