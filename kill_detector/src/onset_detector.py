@@ -11,8 +11,15 @@ def detect_onsets(audio_path):
         if len(y) < 100:  # Assuming audio shorter than 100 samples is too short
             logger.warning("Audio file is too short to detect onsets.")
             return []
-
-        onset_frames = librosa.onset.onset_detect(y=y, sr=sr)
+        onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+        onset_frames = librosa.onset.onset_detect(
+            onset_envelope=onset_env,
+            sr=sr,
+            backtrack=True,
+            pre_max=20,
+            post_max=20,
+            delta=0.3  # 🔥 increase threshold
+        )
         onset_times = librosa.frames_to_time(onset_frames, sr=sr)
 
         logger.info(f"Detected {len(onset_times)} onsets.")

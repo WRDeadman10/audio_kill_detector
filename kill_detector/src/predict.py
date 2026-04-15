@@ -28,10 +28,11 @@ def predict_events(
 
     # Detect onsets
     onset_times = detect_onsets(wav_path)
-
+    print(f"Loaded {len(onset_times)} onset candidates")
     events = []
 
     for onset_time in onset_times:
+        print(f"Processing onset at {onset_time:.2f}s")
         start_sample = int(onset_time * sr)
         end_sample = int((onset_time + 0.5) * sr)
 
@@ -40,6 +41,12 @@ def predict_events(
             continue
 
         frame = y[start_sample:end_sample]
+        
+           # 🔥 ADD THIS BLOCK RIGHT HERE
+        rms = librosa.feature.rms(y=frame)[0][0]
+
+        if rms < 0.02:  # tune this
+            continue
 
         # ✅ Extract features from array (see fix below)
         features = extract_features_from_array(frame, sr)
@@ -67,33 +74,53 @@ def predict_events(
     return filtered_events
 
 def extract_features_from_array(y, sr):
-    if y is None or len(y) == 0:
+    if len(y) == 0:
         return None
 
-    if len(y) < sr * 0.1:
-        return None
-
+    # EXISTING FEATURES
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
-    spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
-    zcr = librosa.feature.zero_crossing_rate(y)
-    rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
 
-    if mfccs.size == 0:
-        return None
+    # 🔥 NEW FEATURES (critical)
+    rms = librosa.feature.rms(y=y)
+    
+    peak_amplitude = np.max(np.abs(y))
+    energy = np.sum(y**2)
+
+    spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)
+    rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)
 
     features = np.concatenate([
         np.mean(mfccs, axis=1), np.std(mfccs, axis=1),
-        np.mean(spectral_centroid, axis=1), np.std(spectral_centroid, axis=1),
-        np.mean(zcr, axis=1), np.std(zcr, axis=1),
-        np.mean(rolloff, axis=1), np.std(rolloff, axis=1)
-    ])
 
-    if np.any(np.isnan(features)):
-        return None
+        # 🔥 ADD THESE
+        [np.mean(rms), np.std(rms)],
+        [peak_amplitude],
+        [energy],
+
+        np.mean(spectral_centroid, axis=1),
+        np.std(spectral_centroid, axis=1),
+        np.mean(rolloff, axis=1),
+        np.std(rolloff, axis=1),
+    ])
 
     return features
 
+def prepare_input(mel_spec):
+    # Normalize
+    mel_spec = (mel_spec - mel_spec.mean()) / (mel_spec.std() + 1e-6)
+
+    # Add channel dimension
+    return mel_spec[np.newaxis, :, :]  # (1, H, W)
 
 if __name__ == "__main__":
     utils.setup_logger("audio_kill")
-    predict_events(r"H:\Ai_Project\audio_kill_detector\inputFolder\inputVideo.mp4")
+    video = r"H:\Ai_Project\audio_kill_detector\inputFolder\inputVideo.mp4"
+
+    print("Starting prediction...")
+
+    events = predict_events(video, confidence_threshold=0.2)
+
+    print(f"\nTotal events detected: {len(events)}")
+
+    for start, end, prob in events:
+        print(f"[{start:.2f}s - {end:.2f}s] Confidence: {prob:.2f}")
